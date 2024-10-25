@@ -15,15 +15,15 @@ load_dotenv()
 
 app = Flask(__name__)
 #hi
-AZURE_API_KEY = "4960b7d3c80e4043a9849ea4a5add5d8"
-AZURE_API_URL = "https://resume-scanner.openai.azure.com/openai/deployments/gpt-35-turbo-16k/chat/completions?api-version=2024-08-01-preview"
+AZURE_API_KEY = "8fec18b289b4478fb809b33a834b75f7"
+AZURE_API_URL = "https://khensample.openai.azure.com/openai/deployments/gpt-4/chat/completions?api-version=2024-08-01-preview"
 MONGO_URI = os.getenv('MONGODB_URI')
 client = MongoClient(MONGO_URI, tlsCAFile=ca)
 
-def list_to_string(item):
+def list_to_string(item, sep):
     if isinstance(item, list):
         # Join list elements into a single string, with each item ending with a newline character
-        return "<br>".join(map(str, item))
+        return sep.join(map(str, item))
     else:
         # Convert non-list items directly to a string
         return str(item)
@@ -147,7 +147,7 @@ def jd_azure(job_description):
     data = {
         "messages": [
             {"role": "system", "content": "You are a job description parser."},
-            {"role": "user", "content": f"Extract the job's information from the following job description: {job_description}. The json file must have job_title, responsibilities, qualifications, eligibility, hard_skills, and soft_skills. Please follow the rules: 1. The user must not know in anyway that you are a generative AI or chatbot of any kind so do not bold any words 2. If any field is empty, put N/A 3.  The output must be in json format."}
+            {"role": "user", "content": f"Extract the job's information from the following job description: {job_description}. The json file must have job_title, responsibilities, qualifications, eligibility, hard_skills, and soft_skills.Qualifications are criteria on education and certification only. Eligibility are the criteria on experience and other neccesary thing. Please follow the rules: 1. The user must not know in anyway that you are a generative AI or chatbot of any kind so do not bold any words 2. If any field is empty, put N/A 3.  The output must be in json format."}
         ]
     }
     response = requests.post(AZURE_API_URL, headers=headers, json=data)
@@ -156,6 +156,7 @@ def jd_azure(job_description):
         result = response.json()
         evaluation = result['choices'][0]['message']['content']
         evaluation_json = json.loads(evaluation)
+        print(evaluation_json)
         return evaluation_json
     else:
         return {"error": "Azure API request failed"}
@@ -291,12 +292,12 @@ def open_position():
             file.save(file_path)
             job_description = extract_docx_text(file_path)
             job_json = jd_azure(job_description)
-            job_title = list_to_string(job_json.get("job_title", "N/A"))
-            responsibilities = list_to_string(job_json.get("responsibilities", "N/A"))
-            qualifications = list_to_string(job_json.get("qualifications", "N/A"))
-            eligibility = list_to_string(job_json.get("eligibility", "N/A"))
-            hard_skills = list_to_string(job_json.get("hard_skills", "N/A"))
-            soft_skills = list_to_string(job_json.get("soft_skills", "N/A"))
+            job_title = list_to_string(job_json.get("job_title", "N/A"), "\n")
+            responsibilities = list_to_string(job_json.get("responsibilities", "N/A"), "\n")
+            qualifications = list_to_string(job_json.get("qualifications", "N/A"), "\n")
+            eligibility = list_to_string(job_json.get("eligibility", "N/A"), "\n")
+            hard_skills = list_to_string(job_json.get("hard_skills", "N/A"), "\n")
+            soft_skills = list_to_string(job_json.get("soft_skills", "N/A"), "\n")
             write_position(job_title, responsibilities, qualifications, eligibility, hard_skills, soft_skills)
         return redirect(url_for('open_position'))
 
@@ -375,8 +376,8 @@ def job_matching():
         'status': "In-Progress",
         'resume_path': absolute_file_path
         }
-        candidate_details["work_experience"] = list_to_string(candidate_details["work_experience"])
-        candidate_details["education"] = list_to_string(candidate_details["education"])
+        candidate_details["work_experience"] = list_to_string(candidate_details["work_experience"], "<br>")
+        candidate_details["education"] = list_to_string(candidate_details["education"], "<br>")
         print(candidate_details)
         db = client['hire_db']
         collection = db['candidate']

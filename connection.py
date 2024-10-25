@@ -10,7 +10,6 @@ load_dotenv()
 MONGO_URI = os.getenv('MONGODB_URI')
 
 client = MongoClient(MONGO_URI, tlsCAFile=ca)
-print("yes")
 db = client['hire_db']
 collection = db['candidate'] # open_position/candidate
 
@@ -49,23 +48,25 @@ collection = db['candidate'] # open_position/candidate
 #     "soft_skills": "Creativity\nCommunication\nTeamwork\nTime management\nAdaptability"
 # }
 
-new_candidate1 = {'id': 'C0001', 'applied_job': 'Software Engineer', 'score': '85', 'name': 'Long Qin Hui', 'phone': '+60123456789', 'email': 'qin.hui@example.com', 'location': 'Kuala Lumpur, Malaysia', 'work_experience': ['5 years at XYZ Software'], 'education': ['Bachelor of Computer Science'], 'hard_skills': 'Java, Python, SQL', 'soft_skills': 'Teamwork, Problem-solving', 'languages': 'English, Mandarin', 'project_links': 'https://github.com/qinhui', 'status': 'Accepted', 'resume_path': 'C:/Users/longh/Documents/experian/uploads/Long Qin Hui CV 07_10.pdf'}
+# new_candidate1 = {'id': 'C0001', 'applied_job': 'Software Engineer', 'score': '85', 'name': 'Long Qin Hui', 'phone': '+60123456789', 'email': 'qin.hui@example.com', 'location': 'Kuala Lumpur, Malaysia', 'work_experience': ['5 years at XYZ Software'], 'education': ['Bachelor of Computer Science'], 'hard_skills': 'Java, Python, SQL', 'soft_skills': 'Teamwork, Problem-solving', 'languages': 'English, Mandarin', 'project_links': 'https://github.com/qinhui', 'status': 'Accepted', 'resume_path': 'C:/Users/longh/Documents/experian/uploads/Long Qin Hui CV 07_10.pdf'}
 
-new_candidate2 = {'id': 'C0002', 'applied_job': 'Software Engineer', 'score': '100', 'name': 'Nyong Chin Venn', 'phone': '+60129876543', 'email': 'chin.venn@example.com', 'location': 'Penang, Malaysia', 'work_experience': ['3 years at ABC Solutions'], 'education': ['Master of Information Technology'], 'hard_skills': 'C++, PHP, JavaScript', 'soft_skills': 'Leadership, Time Management', 'languages': 'English, Malay', 'project_links': 'https://portfolio.example.com/nyongvenn', 'status': 'In-Progress', 'resume_path': 'C:/Users/longh/Documents/experian/uploads/Long Qin Hui CV 07_10.pdf'}
+# new_candidate2 = {'id': 'C0002', 'applied_job': 'Software Engineer', 'score': '100', 'name': 'Nyong Chin Venn', 'phone': '+60129876543', 'email': 'chin.venn@example.com', 'location': 'Penang, Malaysia', 'work_experience': ['3 years at ABC Solutions'], 'education': ['Master of Information Technology'], 'hard_skills': 'C++, PHP, JavaScript', 'soft_skills': 'Leadership, Time Management', 'languages': 'English, Malay', 'project_links': 'https://portfolio.example.com/nyongvenn', 'status': 'In-Progress', 'resume_path': 'C:/Users/longh/Documents/experian/uploads/Long Qin Hui CV 07_10.pdf'}
 
-new_candidate3 = {'id': 'C0003', 'applied_job': 'Software Engineer', 'score': '99', 'name': 'Ethan Walker', 'phone': '+60134567890', 'email': 'ethan.walker@example.com', 'location': 'Singapore', 'work_experience': ['4 years at DEF Tech'], 'education': ['Bachelor of Software Engineering'], 'hard_skills': 'Python, Django, Java', 'soft_skills': 'Communication, Critical Thinking', 'languages': 'English', 'project_links': 'https://linkedin.com/in/ethanwalker', 'status': 'In-Progress', 'resume_path': 'C:/Users/longh/Documents/experian/uploads/Long Qin Hui CV 07_10.pdf'}
+# new_candidate3 = {'id': 'C0003', 'applied_job': 'Software Engineer', 'score': '99', 'name': 'Ethan Walker', 'phone': '+60134567890', 'email': 'ethan.walker@example.com', 'location': 'Singapore', 'work_experience': ['4 years at DEF Tech'], 'education': ['Bachelor of Software Engineering'], 'hard_skills': 'Python, Django, Java', 'soft_skills': 'Communication, Critical Thinking', 'languages': 'English', 'project_links': 'https://linkedin.com/in/ethanwalker', 'status': 'In-Progress', 'resume_path': 'C:/Users/longh/Documents/experian/uploads/Long Qin Hui CV 07_10.pdf'}
 
-# Insert the document into the collection
+
+
+## Open_Position
+collection = db['open_position'] # open_position/candidate
 # insert_result = collection.insert_many([new_job1, new_job2, new_job3, new_job4])
-test =list(collection.find())
-print(test)
+delete_result = collection.delete_one({"job_title": "Product Owner"})
+# test =list(collection.find())
+# print(test)
 
-# collection.insert_many([new_candidate1, new_candidate2, new_candidate3])
-# List of IDs to delete
-ids_to_delete = ["C0004", "C0005", "C0006", "C0007"]
-
-# Delete documents with the specified IDs
-result = collection.delete_many({"id": {"$in": ids_to_delete}})
-
-# Print the number of documents deleted
-print(f'Deleted {result.deleted_count} documents.')
+## Candidate
+# collection = db['candidate'] # open_position/candidate
+# insert_result = collection.insert_many([new_candidate1, new_candidate2, new_candidate3])
+# ids_to_delete = ["C0004", "C0005", "C0006", "C0007"]
+# result = collection.delete_many({"id": {"$in": ids_to_delete}})
+# test =list(collection.find())
+# print(test)

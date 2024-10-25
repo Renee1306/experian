@@ -131,8 +131,16 @@
                             <td>{{ candidate.get("applied_job") }}</td>
                             <td>{{ candidate.get("score") }}</td>
                             <td>{{ candidate.get("name") }}</td>
-                            <td>{{ candidate.get("work_experience") }}</td>
-                            <td>{{ candidate.get("education") }}</td>
+                            <td>
+                                {% for experience in candidate.get("work_experience", []) %}
+                                    {{ experience }}<br>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for experience in candidate.get("education", []) %}
+                                    {{ experience }}<br>
+                                {% endfor %}
+                            </td>
                             <td>{{ candidate.get("hard_skills") }}</td>
                             <td>{{ candidate.get("soft_skills") }}</td>
                             <td>{{ candidate.get("languages") }}</td>

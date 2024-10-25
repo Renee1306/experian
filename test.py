@@ -5,8 +5,8 @@ from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
-AZURE_API_KEY = os.getenv('AZURE_API_KEY', '4960b7d3c80e4043a9849ea4a5add5d8')
-AZURE_API_URL = os.getenv('AZURE_API_URL', 'https://resume-scanner.openai.azure.com/openai/deployments/gpt-35-turbo-16k/chat/completions?api-version=2024-08-01-preview')
+AZURE_API_KEY = os.getenv('AZURE_API_KEY', '8fec18b289b4478fb809b33a834b75f7')
+AZURE_API_URL = os.getenv('AZURE_API_URL', 'https://khensample.openai.azure.com/openai/deployments/gpt-4/chat/completions?api-version=2024-08-01-preview')
 
 # Function to extract text from PDF
 def extract_pdf_text(file_path):
